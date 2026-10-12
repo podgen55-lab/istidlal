@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { DOMAINS_SEED, TRANSCRIPTION_LESSON } from '../data/mockData';
 import { Lesson } from '../types';
-import { CelloMascot } from '../components/CelloMascot';
+import { AbqoorMascot } from '../components/AbqoorMascot';
 import {
   BookOpen,
   CheckCircle2,
@@ -19,7 +19,7 @@ import {
   Send,
   Volume2,
   Bookmark,
-  Share2,
+  Dna,
 } from 'lucide-react';
 
 interface CoursesViewProps {
@@ -29,8 +29,14 @@ interface CoursesViewProps {
 export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => {
   const [selectedDomainId, setSelectedDomainId] = useState('domain1');
   const [activeLesson, setActiveLesson] = useState<Lesson | null>(TRANSCRIPTION_LESSON);
-  const [lessonTab, setLessonTab] = useState<'summary' | 'video' | 'podcast' | 'flashcards' | 'exercise' | 'tutor'>('summary');
+  const [lessonTab, setLessonTab] = useState<'summary' | 'simulator' | 'video' | 'podcast' | 'flashcards' | 'exercise' | 'tutor'>('summary');
   
+  // Interactive DNA transcription simulator state
+  const defaultDna = 'TACGGATTCGCA';
+  const [customDna, setCustomDna] = useState(defaultDna);
+  const [transcribedRna, setTranscribedRna] = useState('');
+  const [isSimulating, setIsSimulating] = useState(false);
+
   // Flashcard flip states
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
@@ -57,6 +63,28 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
   const [isTutorLoading, setIsTutorLoading] = useState(false);
 
   const activeDomain = DOMAINS_SEED.find((d) => d.id === selectedDomainId) || DOMAINS_SEED[0];
+
+  // Simulator helper: A -> U, T -> A, C -> G, G -> C
+  const handleSimulateTranscription = () => {
+    setIsSimulating(true);
+    setTranscribedRna('');
+    const cleanDna = customDna.toUpperCase().replace(/[^ATCG]/g, '');
+    let rna = '';
+    const map: Record<string, string> = { T: 'A', A: 'U', C: 'G', G: 'C' };
+
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i < cleanDna.length) {
+        const base = cleanDna[i];
+        rna += map[base] || '';
+        setTranscribedRna(rna);
+        i++;
+      } else {
+        clearInterval(interval);
+        setIsSimulating(false);
+      }
+    }, 180);
+  };
 
   const handleTutorAsk = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,10 +113,10 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
     // Fallback
     setTimeout(() => {
       setTutorReply(`✅ إجابة المرشد 🧭:
-في آلية الاستنساخ، تذكر دائماً السلسلة السببية:
+في آلية الاستنساخ، تذكر دائماً السلسلة السببية الرسمية:
 1. ارتباط إنزيم ARN بوليمراز بموقع البداية يفك التحام سلسلتي الـ ADN.
-2. اتجاه حركة الإنزيم على السلسلة الناسخة هو حصراً من '3 إلى '5.
-3. اتجاه بناء جزيئة الـ ARNm هو من '5 إلى '3 وفق تكامل القواعد الآزوتية (A مع U و C مع G).`);
+2. اتجاه حركة الإنزيم على السلسلة الناسخة هو حصراً من 3' إلى 5'.
+3. اتجاه بناء جزيئة الـ ARNm هو من 5' إلى 3' وفق تكامل القواعد الآزوتية (A مع U و C مع G).`);
       setIsTutorLoading(false);
     }, 600);
   };
@@ -126,7 +154,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold text-lime-400 px-3 py-1.5 rounded-full bg-lime-400/10 border border-lime-400/20 flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4" />
-              <span>مكتمل (95/100)</span>
+              <span>مكتمل (85/100)</span>
             </span>
           </div>
         </div>
@@ -135,6 +163,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
         <div className="flex items-center gap-2 overflow-x-auto no-scrollbar p-1.5 glass-card rounded-24 border border-navy-800 bg-navy-950/60">
           {[
             { id: 'summary', label: 'ملخص الدرس', icon: FileText },
+            { id: 'simulator', label: 'مختبر الاستنساخ التفاعلي ⚡', icon: Dna },
             { id: 'video', label: 'فيديو وشروحات', icon: Video },
             { id: 'podcast', label: 'بودكاست صوتي', icon: Headphones },
             { id: 'flashcards', label: 'بطاقات المراجعة', icon: Layers },
@@ -149,7 +178,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
                 onClick={() => setLessonTab(tab.id as any)}
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-24 text-xs font-bold whitespace-nowrap transition-all ${
                   isActive
-                    ? 'bg-gradient-to-r from-violet-600 to-cyan-500 text-white shadow-lg shadow-violet-600/30'
+                    ? 'bg-gradient-to-r from-violet-600 via-amber-500 to-cyan-500 text-white shadow-lg shadow-violet-600/30'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-navy-800/60'
                 }`}
               >
@@ -179,13 +208,13 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
               </div>
             </div>
 
-            {/* Side Cello & Quick Rules */}
+            {/* Side Mascot & Quick Rules */}
             <div className="space-y-4">
               <div className="glass-card rounded-24 p-5 border border-navy-700/60 text-center space-y-3">
-                <CelloMascot mood="hint" size="md" />
-                <h3 className="font-heading text-slate-100 text-base">نصيحة سيلّو للامتحان</h3>
+                <AbqoorMascot mood="hint" size="md" className="justify-center" />
+                <h3 className="font-heading text-slate-100 text-base">سر عبقور لامتحان البكالوريا</h3>
                 <p className="text-xs text-slate-300 leading-relaxed text-right bg-navy-950/50 p-3 rounded-20 border border-navy-800">
-                  إذا طلب منك في البكالوريا المقارنة بين السلسلة الناسخة وغير الناسخة: السلسلة غير الناسخة مماثلة تماماً للـ ARNm في القواعد والاتجاه (5' إلى 3') مع تعويض وحيد: <strong>T في الـ ADN يقابله U في الـ ARNm</strong>.
+                  إذا طلب منك المقارنة بين السلسلة الناسخة وغير الناسخة: السلسلة غير الناسخة مماثلة تماماً للـ ARNm في القواعد والاتجاه (5' إلى 3') مع تعويض وحيد: <strong>T في الـ ADN يقابله U في الـ ARNm</strong>.
                 </p>
               </div>
 
@@ -213,11 +242,83 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
           </div>
         )}
 
+        {/* Tab: Interactive Transcription Simulator */}
+        {lessonTab === 'simulator' && (
+          <div className="glass-card rounded-32 p-6 md:p-8 border border-amber-500/30 space-y-6 max-w-4xl mx-auto">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-navy-800 pb-4">
+              <div className="flex items-center gap-3">
+                <AbqoorMascot mood="eureka" size="sm" />
+                <div>
+                  <h3 className="text-lg font-heading text-slate-100">
+                    مختبر عبقور التفاعلي: محاكي إنزيم ARN بوليمراز
+                  </h3>
+                  <p className="text-xs text-slate-400">
+                    جرّب كتابة أي تتالي للسلسلة الناسخة وشاهد دمج النوكليوتيدات في الاتجاه 5' نحو 3' لحظياً
+                  </p>
+                </div>
+              </div>
+              <span className="px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 font-bold text-xs">
+                تجربة حية ⚡
+              </span>
+            </div>
+
+            <div className="space-y-3">
+              <label className="text-xs font-bold text-slate-300 flex items-center justify-between">
+                <span>تتالي السلسلة الناسخة (3' ➔ 5'):</span>
+                <span className="text-slate-400 font-mono text-[11px]">مسموح فقط: A, T, C, G</span>
+              </label>
+              <div className="flex items-center gap-2">
+                <span className="font-mono font-bold text-amber-400 text-sm">3'-</span>
+                <input
+                  type="text"
+                  value={customDna}
+                  onChange={(e) => setCustomDna(e.target.value.toUpperCase())}
+                  placeholder="مثال: TACGGATTCGCA"
+                  className="flex-1 bg-navy-950 border border-navy-700 rounded-20 px-4 py-2.5 font-mono text-sm tracking-widest text-slate-100 uppercase focus:outline-none focus:border-amber-400"
+                />
+                <span className="font-mono font-bold text-amber-400 text-sm">-5'</span>
+              </div>
+            </div>
+
+            <div className="flex justify-center pt-2">
+              <button
+                disabled={isSimulating || !customDna.trim()}
+                onClick={handleSimulateTranscription}
+                className="px-6 py-2.5 rounded-24 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 font-bold text-xs sm:text-sm shadow-lg shadow-amber-400/20 hover:scale-105 disabled:opacity-50 transition-all flex items-center gap-2"
+              >
+                <Dna className="w-4 h-4" />
+                <span>{isSimulating ? 'إنزيم ARN بوليمراز يعمل... ⏳' : 'انطلاق الاستنساخ 🚀'}</span>
+              </button>
+            </div>
+
+            {/* Results Display Board */}
+            <div className="p-6 rounded-24 bg-navy-950/80 border border-navy-800 space-y-4 font-mono text-sm sm:text-base">
+              <div className="flex items-center gap-3">
+                <span className="w-28 text-xs font-sans text-slate-400 font-bold">السلسلة الناسخة:</span>
+                <span className="text-amber-400 tracking-widest">3'- {customDna} -5'</span>
+              </div>
+
+              <div className="flex items-center gap-3 border-t border-navy-800 pt-3">
+                <span className="w-28 text-xs font-sans text-cyan-400 font-bold">جزيئة الـ ARNm:</span>
+                <span className="text-cyan-300 font-bold tracking-widest">
+                  5'- {transcribedRna || <span className="text-slate-600 font-normal">انقر على الزر للمحاكاة</span>} {transcribedRna ? "-3'" : ''}
+                </span>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-20 bg-lime-400/10 border border-lime-400/20 text-xs text-lime-300 flex items-center gap-2">
+              <span>💡</span>
+              <span>
+                <strong>قاعدة التكامل النوعي:</strong> كل A في السلسلة الناسخة يقابله U في الـ ARNm، وكل T يقابله A، وكل C يقابله G، وكل G يقابله C.
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* Tab 2: Video */}
         {lessonTab === 'video' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-4">
-              {/* Simulated Video Player */}
               <div className="relative aspect-video rounded-32 bg-navy-950 border border-violet-500/30 overflow-hidden flex flex-col justify-between p-6 shadow-2xl">
                 <div className="flex items-center justify-between text-xs text-slate-400">
                   <span className="px-3 py-1 rounded-full bg-violet-600/30 text-violet-300 border border-violet-500/30 font-bold">
@@ -227,7 +328,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
                 </div>
 
                 <div className="text-center space-y-3 my-auto">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-violet-600 to-cyan-400 text-white flex items-center justify-center mx-auto shadow-xl shadow-violet-600/40 cursor-pointer hover:scale-110 transition-transform">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-amber-400 via-violet-600 to-cyan-400 text-white flex items-center justify-center mx-auto shadow-xl shadow-amber-400/30 cursor-pointer hover:scale-110 transition-transform">
                     <Play className="w-7 h-7 fill-white ml-1" />
                   </div>
                   <h3 className="font-heading text-lg md:text-xl text-slate-100">
@@ -238,10 +339,9 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
                   </p>
                 </div>
 
-                {/* Progress bar */}
                 <div className="space-y-1">
                   <div className="h-1.5 w-full bg-navy-800 rounded-full overflow-hidden">
-                    <div className="h-full w-2/5 bg-gradient-to-r from-violet-500 to-cyan-400 rounded-full"></div>
+                    <div className="h-full w-2/5 bg-gradient-to-r from-amber-400 to-cyan-400 rounded-full"></div>
                   </div>
                   <div className="flex justify-between text-[10px] text-slate-400 font-mono">
                     <span>03:40</span>
@@ -318,15 +418,14 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
         {/* Tab 3: Podcast */}
         {lessonTab === 'podcast' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Audio Player Card */}
             <div className="lg:col-span-1 glass-card rounded-24 p-6 border border-navy-700/60 space-y-6">
               <div className="text-center space-y-3">
-                <div className="w-24 h-24 rounded-32 bg-gradient-to-tr from-violet-600 via-cyan-400 to-lime-400 mx-auto p-1 shadow-xl shadow-violet-600/20">
+                <div className="w-24 h-24 rounded-32 bg-gradient-to-tr from-amber-400 via-violet-600 to-cyan-400 mx-auto p-1 shadow-xl shadow-amber-400/20">
                   <div className="w-full h-full bg-navy-900 rounded-[28px] flex items-center justify-center text-4xl">
                     🎙️
                   </div>
                 </div>
-                <h3 className="font-heading text-lg text-slate-100">بودكاست استدلال العلمي</h3>
+                <h3 className="font-heading text-lg text-slate-100">بودكاست عبقور العلمي</h3>
                 <p className="text-xs text-slate-400">
                   الحلقة 03: أسرار إنزيم الاستنساخ وفخاخ البكالوريا
                 </p>
@@ -340,13 +439,12 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
                 <div className="flex items-center justify-center gap-4">
                   <button
                     onClick={() => setIsPlaying(!isPlaying)}
-                    className="w-14 h-14 rounded-full bg-gradient-to-r from-violet-600 to-cyan-500 text-white flex items-center justify-center shadow-lg shadow-violet-600/30 hover:scale-105 transition-transform"
+                    className="w-14 h-14 rounded-full bg-gradient-to-r from-amber-400 to-violet-600 text-white flex items-center justify-center shadow-lg shadow-amber-400/30 hover:scale-105 transition-transform"
                   >
                     {isPlaying ? <span className="text-xl">⏸️</span> : <Play className="w-6 h-6 fill-white ml-1" />}
                   </button>
                 </div>
 
-                {/* Speed selector */}
                 <div className="space-y-1 text-center">
                   <span className="text-[11px] text-slate-400 font-bold">سرعة التشغيل:</span>
                   <div className="flex items-center justify-center gap-1.5">
@@ -356,7 +454,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
                         onClick={() => setPlaybackSpeed(s)}
                         className={`px-2.5 py-1 rounded-full text-xs font-mono font-bold transition-colors ${
                           playbackSpeed === s
-                            ? 'bg-violet-600 text-white'
+                            ? 'bg-amber-400 text-slate-900'
                             : 'bg-navy-950 text-slate-400 hover:text-slate-200'
                         }`}
                       >
@@ -366,7 +464,6 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
                   </div>
                 </div>
 
-                {/* Sleep Timer */}
                 <div className="space-y-1 text-center">
                   <span className="text-[11px] text-slate-400 font-bold">مؤقت النوم:</span>
                   <div className="flex items-center justify-center gap-1.5">
@@ -395,7 +492,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
                   <Volume2 className="w-4 h-4 text-cyan-400" />
                   <span>التفريغ النصي التفاعلي للحلقة</span>
                 </h3>
-                <span className="text-xs text-slate-400">حوار بين أستاذ وتلميذ</span>
+                <span className="text-xs text-slate-400">حوار بين الأستاذ عبقور وتلميذه</span>
               </div>
 
               <div className="space-y-3">
@@ -403,12 +500,12 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
                   <div
                     key={idx}
                     className={`p-4 rounded-24 text-xs leading-relaxed border ${
-                      line.speaker === 'الأستاذ'
-                        ? 'bg-violet-950/20 border-violet-500/20 text-slate-200'
+                      line.speaker === 'عبقور'
+                        ? 'bg-amber-950/20 border-amber-500/30 text-slate-200'
                         : 'bg-cyan-950/20 border-cyan-500/20 text-slate-200'
                     }`}
                   >
-                    <span className={`font-bold block mb-1 ${line.speaker === 'الأستاذ' ? 'text-violet-300' : 'text-cyan-300'}`}>
+                    <span className={`font-bold block mb-1 ${line.speaker === 'عبقور' ? 'text-amber-300' : 'text-cyan-300'}`}>
                       {line.speaker}:
                     </span>
                     <p>{line.text}</p>
@@ -606,7 +703,9 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/30 text-violet-300 text-xs font-bold mb-2">
             <span>مسار التعلم التفاعلي</span>
             <span>•</span>
-            <span>3AS علوم تجريبية 2026-2027</span>
+            <span>3AS علوم تجريبية ورياضيات</span>
+            <span>•</span>
+            <span>by ABDERRAHIM FENKOUH</span>
           </div>
           <h1 className="text-2xl font-heading text-slate-100">شجرة المنهاج والوحدات التعليمية</h1>
           <p className="text-xs text-slate-400">
@@ -659,7 +758,6 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
                 const isCurrent = lesson.id === 'd1_u1_l3'; // Lesson 3
                 const isLocked = !isCompleted && !isCurrent;
 
-                // Subtle zigzag offset
                 const offsetClass = lIdx % 2 === 0 ? 'translate-x-0 sm:translate-x-6' : 'translate-x-0 sm:-translate-x-6';
 
                 return (
@@ -681,7 +779,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
                     <div
                       className={`w-14 h-14 rounded-24 flex items-center justify-center text-xl flex-shrink-0 shadow-lg ${
                         isCurrent
-                          ? 'bg-gradient-to-tr from-lime-400 to-cyan-400 text-navy-950 font-bold animate-pulse'
+                          ? 'bg-gradient-to-tr from-amber-400 to-cyan-400 text-navy-950 font-bold animate-pulse'
                           : isCompleted
                           ? 'bg-violet-600 text-white'
                           : 'bg-navy-800 text-slate-500'
@@ -720,9 +818,9 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
         ))}
       </div>
 
-      {/* Official credit line in footer as specified */}
+      {/* Official credit line in footer updated as specified */}
       <div className="text-center text-xs text-slate-500 py-4 border-t border-navy-800">
-        البرنامج الرسمي لمادة علوم الطبيعة والحياة (شعبة علوم تجريبية) • وثيقة المنهاج مصادق عليها وموقعة من طرف: <strong className="text-slate-400">الأستاذ عدة بن عطية صلاح الدين</strong>.
+        البرنامج الرسمي لمادة علوم الطبيعة والحياة (شعبة علوم تجريبية ورياضيات) • <strong className="text-slate-300">by ABDERRAHIM FENKOUH</strong>.
       </div>
     </div>
   );

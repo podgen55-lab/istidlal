@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { BATTLE_QUESTIONS } from '../data/mockData';
-import { CelloMascot } from '../components/CelloMascot';
+import { AbqoorMascot } from '../components/AbqoorMascot';
 import confetti from 'canvas-confetti';
 import {
-  Gamepad2,
   Heart,
-  Zap,
   Clock,
-  Sparkles,
   RotateCcw,
-  Award,
-  ShieldAlert,
   Flame,
   CheckCircle2,
   XCircle,
@@ -50,9 +45,9 @@ export const GamesView: React.FC<GamesViewProps> = ({ onAddXP }) => {
       gain.connect(ctx.destination);
 
       if (type === 'correct') {
-        osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
-        osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1); // E5
-        osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2); // G5
+        osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+        osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1);
+        osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2);
         gain.gain.setValueAtTime(0.15, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
         osc.start();
@@ -66,8 +61,8 @@ export const GamesView: React.FC<GamesViewProps> = ({ onAddXP }) => {
         osc.stop(ctx.currentTime + 0.35);
       } else if (type === 'win') {
         confetti({
-          particleCount: 80,
-          spread: 70,
+          particleCount: 100,
+          spread: 80,
           origin: { y: 0.6 }
         });
       }
@@ -79,7 +74,7 @@ export const GamesView: React.FC<GamesViewProps> = ({ onAddXP }) => {
     if (isAnswered || isGameOver || isWon) return;
 
     if (timeLeft <= 0) {
-      handleAnswer(-1); // time out
+      handleAnswer(-1);
       return;
     }
 
@@ -126,7 +121,7 @@ export const GamesView: React.FC<GamesViewProps> = ({ onAddXP }) => {
     } else {
       setIsWon(true);
       playSfx('win');
-      onAddXP(50); // Victory bonus
+      onAddXP(50);
     }
   };
 
@@ -154,7 +149,6 @@ export const GamesView: React.FC<GamesViewProps> = ({ onAddXP }) => {
       .map((_, idx) => idx)
       .filter((idx) => idx !== currentQ.correctAnswer);
 
-    // Pick 2 wrong answers to hide
     const toHide = wrongIndexes.slice(0, 2);
     setHiddenOptions(toHide);
   };
@@ -176,20 +170,20 @@ export const GamesView: React.FC<GamesViewProps> = ({ onAddXP }) => {
       {/* Header Banner */}
       <div className="glass-card rounded-24 p-6 border border-navy-700/60 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-24 bg-gradient-to-tr from-coral-brand via-violet-600 to-lime-400 p-0.5 shadow-lg">
+          <div className="w-12 h-12 rounded-24 bg-gradient-to-tr from-amber-400 via-violet-600 to-cyan-400 p-0.5 shadow-lg">
             <div className="w-full h-full bg-navy-950 rounded-[22px] flex items-center justify-center text-2xl">
-              🎮
+              👨‍🔬
             </div>
           </div>
           <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-coral-brand/20 text-coral-brand text-[10px] font-bold border border-coral-brand/30">
-              لعبة تفاعلية
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-[10px] font-bold border border-amber-400/30">
+              تحدي الذكاء السريع
             </div>
             <h1 className="text-xl md:text-2xl font-heading text-slate-100">
-              معركة الخلية (Cell Quiz Battle)
+              معركة عبقور العلمية (Abqoor Quiz Battle)
             </h1>
             <p className="text-xs text-slate-400">
-              تحدَّ سيلّو في أسئلة الاستنساخ والترجمة وحافظ على قلوبك للوصول للنهائي!
+              تحدَّ عبقور في دقائق معدودة، وفكك ألغاز الاستنساخ وحافظ على قلوبك للوصول للنهائي!
             </p>
           </div>
         </div>
@@ -209,21 +203,21 @@ export const GamesView: React.FC<GamesViewProps> = ({ onAddXP }) => {
 
       {/* Game State: Victory Screen */}
       {isWon && (
-        <div className="glass-card rounded-32 p-8 text-center space-y-6 border border-lime-400/40 bg-gradient-to-b from-navy-900 to-navy-950 shadow-2xl animate-scaleUp">
-          <CelloMascot mood="cheering" size="lg" className="justify-center" />
+        <div className="glass-card rounded-32 p-8 text-center space-y-6 border border-amber-400/40 bg-gradient-to-b from-navy-900 to-navy-950 shadow-2xl animate-scaleUp">
+          <AbqoorMascot mood="eureka" size="lg" className="justify-center" />
           <div className="space-y-2">
-            <h2 className="text-3xl font-heading text-transparent bg-clip-text bg-gradient-to-r from-lime-400 to-cyan-300">
-              انتصار ساحق في معركة الخلية! 🏆
+            <h2 className="text-3xl font-heading text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-lime-400 to-cyan-300">
+              يوريكا! انتصار علمي عبقري! 🏆⚡
             </h2>
             <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto">
-              أثبتَّ إتقاناً ممتازاً لآليات الاستنساخ والشروط البيولوجية للتعبير المورثي.
+              «أنت نابغة بحق!» — عبقور يرفع لك القبعة على تحكمك الدقيق بآليات الاستنساخ والقراءة المتعاكسة.
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto">
             <div className="p-4 rounded-24 bg-navy-950/80 border border-violet-500/30">
               <span className="text-xs text-slate-400 block mb-1">النقاط المكتسبة</span>
-              <span className="text-2xl font-mono font-bold text-violet-300">+{score} XP</span>
+              <span className="text-2xl font-mono font-bold text-amber-300">+{score} XP</span>
             </div>
             <div className="p-4 rounded-24 bg-navy-950/80 border border-lime-500/30">
               <span className="text-xs text-slate-400 block mb-1">القلوب المتبقية</span>
@@ -233,10 +227,10 @@ export const GamesView: React.FC<GamesViewProps> = ({ onAddXP }) => {
 
           <button
             onClick={handleRestart}
-            className="px-6 py-3 rounded-24 bg-gradient-to-r from-violet-600 to-lime-500 text-white font-bold text-xs sm:text-sm shadow-xl shadow-lime-500/20 hover:scale-105 transition-transform inline-flex items-center gap-2"
+            className="px-6 py-3 rounded-24 bg-gradient-to-r from-amber-400 to-violet-600 text-slate-900 font-bold text-xs sm:text-sm shadow-xl shadow-amber-400/20 hover:scale-105 transition-transform inline-flex items-center gap-2"
           >
             <RotateCcw className="w-4 h-4" />
-            <span>لعب جولة جديدة</span>
+            <span>خوض جولة عبقرية جديدة</span>
           </button>
         </div>
       )}
@@ -244,13 +238,13 @@ export const GamesView: React.FC<GamesViewProps> = ({ onAddXP }) => {
       {/* Game State: Game Over Screen */}
       {isGameOver && (
         <div className="glass-card rounded-32 p-8 text-center space-y-6 border border-rose-500/40 bg-gradient-to-b from-navy-900 to-navy-950 shadow-2xl animate-scaleUp">
-          <CelloMascot mood="worried" size="lg" className="justify-center" />
+          <AbqoorMascot mood="worried" size="lg" className="justify-center" />
           <div className="space-y-2">
             <h2 className="text-2xl font-heading text-rose-400">
-              نفدت القلوب! لا تستسلم يا بطل 💔
+              نفدت القلوب! لا تستسلم أبداً يا بطل 💔
             </h2>
             <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto">
-              الأخطاء هي المحطة الأولى في فهم المنهجية. راجع ملخص الدرس وجرب مجدداً!
+              «من لم يخطئ لم يجرب شيئاً جديداً!» — راجع ملخص الدرس ثم عاود التحدي لتثأر لقلوبك!
             </p>
           </div>
 
@@ -259,7 +253,7 @@ export const GamesView: React.FC<GamesViewProps> = ({ onAddXP }) => {
             className="px-6 py-3 rounded-24 bg-navy-800 hover:bg-navy-700 text-slate-100 font-bold text-xs sm:text-sm border border-navy-700 transition-colors inline-flex items-center gap-2"
           >
             <RotateCcw className="w-4 h-4" />
-            <span>إعادة المحاولة من البداية</span>
+            <span>إعادة المحاولة مع عبقور</span>
           </button>
         </div>
       )}
@@ -279,7 +273,7 @@ export const GamesView: React.FC<GamesViewProps> = ({ onAddXP }) => {
               <div className="w-full bg-navy-950 h-3 rounded-full overflow-hidden p-0.5 border border-navy-800">
                 <div
                   className={`h-full rounded-full transition-all duration-1000 ${
-                    timeLeft <= 5 ? 'bg-rose-500 animate-pulse' : 'bg-gradient-to-r from-violet-500 to-cyan-400'
+                    timeLeft <= 5 ? 'bg-rose-500 animate-pulse' : 'bg-gradient-to-r from-amber-400 to-cyan-400'
                   }`}
                   style={{ width: `${(timeLeft / 20) * 100}%` }}
                 ></div>
@@ -356,7 +350,7 @@ export const GamesView: React.FC<GamesViewProps> = ({ onAddXP }) => {
 
           {/* Power-ups Tray */}
           <div className="p-4 rounded-24 bg-navy-950/50 border border-navy-800 flex items-center justify-between gap-2 overflow-x-auto no-scrollbar">
-            <span className="text-[11px] text-slate-400 font-bold whitespace-nowrap">وسائل المساعدة:</span>
+            <span className="text-[11px] text-slate-400 font-bold whitespace-nowrap">مساعدات عبقور:</span>
             <div className="flex items-center gap-2">
               <button
                 disabled={power5050Used || isAnswered}
@@ -377,7 +371,7 @@ export const GamesView: React.FC<GamesViewProps> = ({ onAddXP }) => {
               <button
                 disabled={doubleXpActive || isAnswered}
                 onClick={useDoubleXp}
-                className="px-3 py-1.5 rounded-full bg-lime-600/20 hover:bg-lime-600/30 border border-lime-500/30 text-lime-300 text-xs font-bold disabled:opacity-40 transition-colors"
+                className="px-3 py-1.5 rounded-full bg-amber-400/20 hover:bg-amber-400/30 border border-amber-400/30 text-amber-300 text-xs font-bold disabled:opacity-40 transition-colors"
                 title="مضاعفة الـ XP"
               >
                 ⚡ 2X مضاعف
@@ -390,7 +384,7 @@ export const GamesView: React.FC<GamesViewProps> = ({ onAddXP }) => {
             <div className="p-4 rounded-24 bg-navy-950 border border-navy-700/80 space-y-3 animate-fadeIn">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-lime-400">
-                  {selectedOpt === currentQ.correctAnswer ? 'إجابة صحيحة ومتقنة! 🌟' : 'إجابة خاطئة ⚠️'}
+                  {selectedOpt === currentQ.correctAnswer ? 'إجابة عبقرية صحيحة! 🌟' : 'إجابة خاطئة ⚠️'}
                 </span>
                 <span className="text-[11px] text-slate-400 font-bold">
                   الفعل: «{currentQ.verb}»
@@ -402,7 +396,7 @@ export const GamesView: React.FC<GamesViewProps> = ({ onAddXP }) => {
               <div className="flex justify-end pt-1">
                 <button
                   onClick={handleNext}
-                  className="px-6 py-2.5 rounded-24 bg-gradient-to-r from-violet-600 to-cyan-500 text-white text-xs font-bold shadow-lg shadow-violet-600/20 hover:scale-105 transition-transform"
+                  className="px-6 py-2.5 rounded-24 bg-gradient-to-r from-amber-400 to-violet-600 text-slate-900 font-bold text-xs shadow-lg shadow-amber-400/20 hover:scale-105 transition-transform"
                 >
                   السؤال التالي ➔
                 </button>

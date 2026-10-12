@@ -20,8 +20,9 @@ export interface LessonResource {
   podcastUrl?: string;
   podcastDuration?: string;
   podcastTranscript?: { speaker: string; text: string }[];
-  flashcards?: { front: string; back: string; frenchTerm?: string }[];
+  flashcards?: { id?: string; front: string; back: string; frenchTerm?: string }[];
   exercise?: {
+    id?: string;
     title: string;
     description: string;
     points: number;
@@ -31,10 +32,11 @@ export interface LessonResource {
 
 export interface Lesson {
   id: string;
-  unitId: string;
-  domainId: string;
+  unitId?: string;
+  domainId?: string;
   title: string;
   french?: string;
+  duration?: string;
   trimester?: number | null;
   plannedWeek?: number | null;
   completed?: boolean;
@@ -44,7 +46,7 @@ export interface Lesson {
 
 export interface Unit {
   id: string;
-  domainId: string;
+  domainId?: string;
   title: string;
   lessons: Lesson[];
 }
@@ -76,6 +78,16 @@ export interface QuizQuestion {
   explanation: string;
   reasoningLevel: number; // 1 to 4
   verb: string;
+}
+
+export type Question = QuizQuestion;
+
+export interface LeaderboardEntry {
+  rank: number;
+  name: string;
+  xp: number;
+  streak: number;
+  avatar: string;
 }
 
 export interface QuizResult {

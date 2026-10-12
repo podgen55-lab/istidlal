@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import { DIAGNOSTIC_QUIZ_QUESTIONS } from '../data/mockData';
-import { CelloMascot } from '../components/CelloMascot';
+import { AbqoorMascot } from '../components/AbqoorMascot';
 import confetti from 'canvas-confetti';
 import {
-  Award,
   CheckCircle2,
   XCircle,
   RotateCcw,
   BookOpen,
-  ArrowRight,
-  TrendingUp,
-  BrainCircuit,
   Compass,
 } from 'lucide-react';
 
@@ -61,7 +57,7 @@ export const AssessmentView: React.FC<AssessmentViewProps> = ({
         spread: 80,
         origin: { y: 0.6 }
       });
-      onAddXP(50); // Completion bonus
+      onAddXP(50);
     }
   };
 
@@ -78,7 +74,6 @@ export const AssessmentView: React.FC<AssessmentViewProps> = ({
   const scoreOutOf20 = ((correctCount / totalQuestions) * 20).toFixed(1);
   const percentage = Math.round((correctCount / totalQuestions) * 100);
 
-  // Concept masteries
   const masteredTopics = [
     'المسار الرباعي لاستغلال الوثائق (التعريف، المعطيات، الدلالة، الاستنتاج)',
     'هيكلة النص العلمي وضمان نقطتي الهيكلة (2.00 ن)',
@@ -97,13 +92,13 @@ export const AssessmentView: React.FC<AssessmentViewProps> = ({
             تقييم تشخيصي رسمي
           </div>
           <h1 className="text-xl md:text-2xl font-heading text-slate-100">
-            اختبار كفاءات منهجية البكالوريا (دليل 2017)
+            اختبار كفاءات منهجية بكالوريا علوم الطبيعة والحياة
           </h1>
           <p className="text-xs text-slate-400">
             فحص استيعابك لقواعد بناء الاختبار وشبكات التنقيط والأفعال الأدائية الرسمية
           </p>
         </div>
-        <div className="w-12 h-12 rounded-24 bg-gradient-to-tr from-violet-600 to-cyan-500 flex items-center justify-center text-2xl shadow-lg">
+        <div className="w-12 h-12 rounded-24 bg-gradient-to-tr from-amber-400 to-violet-600 flex items-center justify-center text-2xl shadow-lg">
           📊
         </div>
       </div>
@@ -112,7 +107,7 @@ export const AssessmentView: React.FC<AssessmentViewProps> = ({
       {isFinished ? (
         <div className="glass-card rounded-32 p-6 md:p-8 border border-violet-500/30 space-y-8 animate-scaleUp">
           <div className="text-center space-y-3">
-            <CelloMascot mood={percentage >= 60 ? 'cheering' : 'hint'} size="lg" className="justify-center" />
+            <AbqoorMascot mood={percentage >= 60 ? 'eureka' : 'hint'} size="lg" className="justify-center" />
             <h2 className="text-2xl md:text-3xl font-heading text-slate-100">
               تقرير التقييم المنهجي النهائي 📋
             </h2>
@@ -125,7 +120,7 @@ export const AssessmentView: React.FC<AssessmentViewProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="p-5 rounded-24 bg-navy-950/80 border border-violet-500/30 text-center space-y-1">
               <span className="text-xs text-slate-400 font-bold block">العلامة التقديرية</span>
-              <span className="text-3xl font-heading text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-cyan-300">
+              <span className="text-3xl font-heading text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-violet-300 to-cyan-300">
                 {scoreOutOf20} / 20
               </span>
             </div>
@@ -211,7 +206,7 @@ export const AssessmentView: React.FC<AssessmentViewProps> = ({
 
             <button
               onClick={onOpenAgentTeam}
-              className="px-5 py-2.5 rounded-24 bg-navy-800 hover:bg-navy-700 text-lime-400 border border-lime-400/30 text-xs font-bold transition-colors flex items-center gap-2"
+              className="px-5 py-2.5 rounded-24 bg-navy-800 hover:bg-navy-700 text-amber-300 border border-amber-400/30 text-xs font-bold transition-colors flex items-center gap-2"
             >
               <Compass className="w-4 h-4" />
               <span>استشارة فريق استدلال</span>
@@ -221,7 +216,6 @@ export const AssessmentView: React.FC<AssessmentViewProps> = ({
       ) : (
         /* Active Quiz Board */
         <div className="glass-card rounded-32 p-6 md:p-8 border border-navy-700/60 space-y-6">
-          {/* Progress */}
           <div className="flex items-center justify-between text-xs text-slate-400">
             <span className="font-bold text-violet-400">
               السؤال {currentIdx + 1} من {totalQuestions}
@@ -231,7 +225,6 @@ export const AssessmentView: React.FC<AssessmentViewProps> = ({
             </span>
           </div>
 
-          {/* Question Box */}
           <div className="p-6 rounded-24 bg-navy-950/80 border border-navy-800 space-y-2">
             {currentQ.frenchTerm && (
               <span className="text-[11px] font-mono text-cyan-400/80 italic block">
@@ -243,7 +236,6 @@ export const AssessmentView: React.FC<AssessmentViewProps> = ({
             </h2>
           </div>
 
-          {/* Options */}
           <div className="space-y-3">
             {currentQ.options.map((opt, idx) => {
               const isSelected = selectedOpt === idx;
@@ -280,12 +272,11 @@ export const AssessmentView: React.FC<AssessmentViewProps> = ({
             })}
           </div>
 
-          {/* Explanation Banner & Next */}
           {isSubmitted && (
             <div className="p-4 rounded-24 bg-navy-950 border border-navy-700/80 space-y-3 animate-fadeIn">
               <div className="flex items-center justify-between">
                 <span className={`text-xs font-bold ${selectedOpt === currentQ.correctAnswer ? 'text-lime-400' : 'text-rose-400'}`}>
-                  {selectedOpt === currentQ.correctAnswer ? 'إجابة صحيحة وفق الدليل الوزاري ✓' : 'إجابة غير صحيحة ✕'}
+                  {selectedOpt === currentQ.correctAnswer ? 'إجابة صحيحة وفق المعايير الوزارية ✓' : 'إجابة غير صحيحة ✕'}
                 </span>
                 <span className="text-[11px] text-slate-400 font-bold">
                   الفعل: «{currentQ.verb}»
@@ -297,7 +288,7 @@ export const AssessmentView: React.FC<AssessmentViewProps> = ({
               <div className="flex justify-end pt-1">
                 <button
                   onClick={handleNext}
-                  className="px-6 py-2.5 rounded-24 bg-gradient-to-r from-violet-600 to-cyan-500 text-white text-xs font-bold shadow-lg shadow-violet-600/20 hover:scale-105 transition-transform"
+                  className="px-6 py-2.5 rounded-24 bg-gradient-to-r from-amber-400 to-violet-600 text-slate-900 font-bold text-xs shadow-lg shadow-amber-400/20 hover:scale-105 transition-transform"
                 >
                   {currentIdx + 1 < totalQuestions ? 'السؤال التالي ➔' : 'عرض النتيجة النهائية 📊'}
                 </button>

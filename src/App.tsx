@@ -80,16 +80,16 @@ function AppContent() {
         onClose={() => setIsAuthModalOpen(false)}
       />
 
-      {/* Minimal Footer */}
+      {/* Minimal Footer with ABDERRAHIM FENKOUH attribution */}
       <footer className="border-t border-navy-800/60 bg-navy-950/80 py-4 px-6 text-center text-xs text-slate-500 hidden md:block">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="font-heading text-slate-300">استدلال (istidlal)</span>
+            <span className="font-heading text-slate-200">استدلال (istidlal)</span>
             <span>•</span>
             <span>منصة التميز المنهجي لبكالوريا علوم الطبيعة والحياة (3AS)</span>
           </div>
           <div>
-            قاعدة البيانات: <span className="text-lime-400 font-mono font-bold">Firebase Firestore متصل</span> • المنهاج: <span className="text-slate-400 font-bold">الأستاذ عدة بن عطية صلاح الدين</span>
+            بإشراف وتطوير: <strong className="text-amber-300 font-mono">ABDERRAHIM FENKOUH</strong> • قاعدة البيانات: <span className="text-lime-400 font-mono">Firestore متصل</span>
           </div>
         </div>
       </footer>
