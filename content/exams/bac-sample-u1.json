@@ -1,0 +1,16 @@
+{
+  "id": "bac-sample-u1",
+  "status": "published",
+  "title": "موضوع بكالوريا تجريبي - الوحدة الأولى (آليات تركيب البروتين)",
+  "stream": "علوم تجريبية",
+  "totalDurationMinutes": 120,
+  "totalScore": 20.0,
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "referenceId": "u1-l1-ex1",
+      "allocatedPoints": 5.0,
+      "description": "استرجاع منظم للمعلومات: مقر تركيب البروتين والنص العلمي"
+    }
+  ]
+}

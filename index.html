@@ -4,8 +4,42 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>إستدلال | Istidlal by fnk - منصة التميز المنهجي لبكالوريا علوم الطبيعة والحياة</title>
+  <meta name="description" content="منصة التميز المنهجي لبكالوريا علوم الطبيعة والحياة - علاج معضلة المنهجية والاستدلال العلمي والتصحيح بالذكاء الاصطناعي" />
+  <meta property="og:title" content="إستدلال | Istidlal by fnk - منصة التميز المنهجي لبكالوريا علوم الطبيعة والحياة" />
+  <meta property="og:description" content="منصة التميز المنهجي لبكالوريا علوم الطبيعة والحياة - علاج معضلة المنهجية والاستدلال العلمي والتصحيح بالذكاء الاصطناعي" />
 
   <style>
+    /* Toast notifications */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+    }
+    .toast-message {
+      background: #0f172a;
+      color: #f1f5f9;
+      border: 1px solid #10b981;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+      animation: toastFade 3.2s forwards;
+      pointer-events: auto;
+    }
+    @keyframes toastFade {
+      0% { opacity: 0; transform: translateY(12px); }
+      15% { opacity: 1; transform: translateY(0); }
+      85% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-12px); }
+    }
     /* Reset & Core Typography */
     * {
       box-sizing: border-box;
@@ -1127,38 +1161,43 @@
     </div>
   </div>
 
-  <!-- 4. Google AI Studio Settings Modal -->
+  <!-- 4. Google AI Studio Status Modal -->
   <div id="apiSettingsModal" class="modal-overlay">
     <div class="modal-box">
       <div class="modal-header">
-        <span style="color: #34d399;">🔑 ربط مفتاح Google AI Studio (Gemini API)</span>
+        <span style="color: #34d399;">🤖 تكامل Google AI Studio (Gemini)</span>
         <button onclick="closeApiSettingsModal()" class="doc-btn">إغلاق ✕</button>
       </div>
       <div class="modal-body" style="display:flex; flex-direction:column; gap:12px;">
-        <p style="font-size:11px; color:#cbd5e1;">
-          اربط منصتك بنماذج <strong>Gemini 1.5 Flash</strong> و <strong>Gemini 1.5 Pro</strong> لتصحيح خط اليد والتسجيلات الصوتية مباشرة:
+        <div style="background:rgba(16, 185, 129, 0.12); border:1px solid rgba(16, 185, 129, 0.35); border-radius:10px; padding:12px; display:flex; align-items:center; gap:10px;">
+          <div style="width:10px; height:10px; border-radius:50%; background:#10b981; box-shadow:0 0 10px #10b981;"></div>
+          <div>
+            <div style="font-size:12px; font-weight:800; color:#34d399;">الذكاء الاصطناعي متصل وجاهز للخدمة</div>
+            <div style="font-size:10px; color:#94a3b8;">النموذج النشط: <strong style="color:#f8fafc;" id="activeAiModelName">Gemini 3.8 Flash</strong></div>
+          </div>
+        </div>
+
+        <p style="font-size:11px; color:#cbd5e1; line-height:1.6;">
+          تم ربط المنصة مباشرة عبر خادم التطبيق السحابي بنماذج <strong>Google AI Studio</strong> وفق المعايير الوزارية لبكالوريا الجزائر:
         </p>
-        
-        <div style="display:flex; flex-direction:column; gap:4px;">
-          <label style="font-size:10px; font-weight:800; color:#94a3b8;">أدخل مفتاح Gemini API (مجاني من aistudio.google.com):</label>
-          <input type="password" id="geminiApiKeyInput" style="width:100%; background:#1e293b; border:1px solid #334155; border-radius:8px; padding:8px; color:#fff; font-family:monospace; font-size:11px;" placeholder="AIzaSy..." />
+
+        <div style="display:flex; flex-direction:column; gap:6px; font-size:11px; color:#94a3b8;">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span style="color:#10b981;">✓</span>
+            <span>تصحيح فوري وتحليل منهجي لإجابات التلميذ النصية.</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span style="color:#10b981;">✓</span>
+            <span>معالجة صور الكراس للتعرف على خط اليد ورصد فخاخ المنهجية.</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span style="color:#10b981;">✓</span>
+            <span>تقييم الإملاء والتسجيلات الصوتية باللغة العربية.</span>
+          </div>
         </div>
 
-        <div style="display:flex; gap:8px; align-items:center;">
-          <label style="font-size:10px; font-weight:700; color:#cbd5e1;">النموذج المفضل:</label>
-          <select id="geminiModelSelect" style="background:#1e293b; border:1px solid #334155; color:#fff; border-radius:6px; padding:4px 6px; font-size:10px;">
-            <option value="gemini-1.5-flash">Gemini 1.5 Flash (سريع جداً)</option>
-            <option value="gemini-1.5-pro">Gemini 1.5 Pro (استدلال عميق)</option>
-          </select>
-        </div>
-
-        <div style="background:rgba(16, 185, 129, 0.1); border:1px solid rgba(16, 185, 129, 0.25); border-radius:10px; padding:8px; font-size:10px; color:#a7f3d0;">
-          💡 المفتاح يُحفظ محلياً في جهازك فقط (localStorage) ولا يُرسل لأي طرف ثالث.
-        </div>
-
-        <div style="display:flex; justify-content:space-between; margin-top:6px;">
-          <button onclick="clearSavedApiKey()" class="doc-btn" style="color:#f43f5e;">حذف المفتاح</button>
-          <button onclick="saveApiKeySettings()" class="btn-action btn-primary" style="padding:6px 16px;">حفظ وتفعيل ✓</button>
+        <div style="display:flex; justify-content:flex-end; margin-top:6px;">
+          <button onclick="closeApiSettingsModal()" class="btn-action btn-primary" style="padding:6px 20px;">حسناً ✓</button>
         </div>
       </div>
     </div>
@@ -1216,34 +1255,40 @@
       if (activeContainer) activeContainer.classList.add('active');
     }
 
-    // --- Google AI Studio Settings ---
-    function openApiSettingsModal() {
-      const savedKey = localStorage.getItem('gemini_api_key') || 'AQ.Ab8RN6JUwuVF26MKSs1cZnw42J4HKTBCERyQa9FcCQAOBgG8fw';
-      document.getElementById('geminiApiKeyInput').value = savedKey;
-      const savedModel = localStorage.getItem('gemini_model') || 'gemini-1.5-flash';
-      document.getElementById('geminiModelSelect').value = savedModel;
+    // --- In-App Safe Toast Notification ---
+    function showToast(message) {
+      let container = document.getElementById('toastContainer');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'toastContainer';
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+      }
+      const el = document.createElement('div');
+      el.className = 'toast-message';
+      el.textContent = message;
+      container.appendChild(el);
+      setTimeout(() => { el.remove(); }, 3200);
+    }
+
+    // --- Google AI Studio Modal & Status ---
+    async function openApiSettingsModal() {
+      try {
+        const res = await fetch('/api/gemini/status');
+        if (res.ok) {
+          const data = await res.json();
+          const nameEl = document.getElementById('activeAiModelName');
+          if (nameEl && data.model) {
+            nameEl.textContent = data.model;
+          }
+        }
+      } catch (e) {
+        console.warn('Could not fetch AI status:', e);
+      }
       document.getElementById('apiSettingsModal').classList.add('active');
     }
     function closeApiSettingsModal() {
       document.getElementById('apiSettingsModal').classList.remove('active');
-    }
-    function saveApiKeySettings() {
-      const key = document.getElementById('geminiApiKeyInput').value.trim();
-      const model = document.getElementById('geminiModelSelect').value;
-      if (key) {
-        localStorage.setItem('gemini_api_key', key);
-        localStorage.setItem('gemini_model', model);
-        alert('تم تفعيل مفتاح Google AI Studio بنجاح! متصل بـ ' + model);
-      } else {
-        localStorage.removeItem('gemini_api_key');
-        alert('تم التحويل لوضع المصحح المنهجي المدمج.');
-      }
-      closeApiSettingsModal();
-    }
-    function clearSavedApiKey() {
-      localStorage.removeItem('gemini_api_key');
-      document.getElementById('geminiApiKeyInput').value = '';
-      alert('تم حذف المفتاح.');
     }
 
     // --- Text Answer Counter ---
@@ -1277,7 +1322,7 @@
 
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRecognition) {
-        alert('خاصية التعرف الصوتي غير مدعومة مباشرة في هذا المتصفح. يمكنك استخدام الكتابة النصية.');
+        showToast('خاصية التعرف الصوتي غير مدعومة مباشرة في هذا المتصفح. يمكنك استخدام الكتابة النصية.');
         return;
       }
 
@@ -1334,7 +1379,7 @@
     function toggleQuickVoiceToText() {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRecognition) {
-        alert('ميزة التعرف الصوتي غير مدعومة في متصفحك.');
+        showToast('ميزة التعرف الصوتي غير مدعومة في متصفحك.');
         return;
       }
       const rec = new SpeechRecognition();
@@ -1347,41 +1392,28 @@
       rec.start();
     }
 
-    // --- AI Evaluation Bridge ---
+    // --- AI Evaluation Bridge (Server-Side Proxy) ---
     async function evaluateWithGemini(promptText, imageB64) {
-      const apiKey = localStorage.getItem('gemini_api_key') || 'AQ.Ab8RN6JUwuVF26MKSs1cZnw42J4HKTBCERyQa9FcCQAOBgG8fw';
-      const model = localStorage.getItem('gemini_model') || 'gemini-1.5-flash';
-
-      if (apiKey) {
-        try {
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-          const parts = [];
-          if (imageB64) {
-            parts.push({
-              inline_data: {
-                mime_type: 'image/jpeg',
-                data: imageB64.replace(/^data:image\/[a-z]+;base64,/, '')
-              }
-            });
+      try {
+        const response = await fetch('/api/gemini/evaluate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            prompt: promptText,
+            imageBase64: imageB64,
+            model: 'gemini-3.8-flash'
+          })
+        });
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.text) {
+            return data.text;
           }
-          parts.push({ text: promptText });
-
-          const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contents: [{ parts }] })
-          });
-          if (response.ok) {
-            const data = await response.json();
-            if (data.candidates && data.candidates[0].content) {
-              return data.candidates[0].content.parts[0].text;
-            }
-          } else {
-            console.warn('Gemini API returned status:', response.status);
-          }
-        } catch (e) {
-          console.error('Gemini API fetch error:', e);
+        } else {
+          console.warn('Server evaluate error status:', response.status);
         }
+      } catch (e) {
+        console.warn('Gemini proxy error:', e);
       }
       return null;
     }
@@ -1419,7 +1451,7 @@
     async function submitTextAnswerForAiEvaluation() {
       const text = document.getElementById('studentTextAnswer').value.trim();
       if (!text) {
-        alert('يرجى كتابة إجابتك أولاً.');
+        showToast('يرجى كتابة إجابتك أولاً.');
         return;
       }
       const box = document.getElementById('textAiResultBox');
@@ -1457,7 +1489,7 @@
 
     async function submitImageForAiEvaluation() {
       if (!uploadedNotebookBase64) {
-        alert('يرجى التقاط صورة للكراس أولاً.');
+        showToast('يرجى التقاط صورة للكراس أولاً.');
         return;
       }
       const box = document.getElementById('imageAiResultBox');
@@ -1482,7 +1514,7 @@
 
     async function submitVoiceForAiEvaluation() {
       if (!voiceTranscriptText.trim()) {
-        alert('يرجى تسجيل إجابتك الصوتية أولاً.');
+        showToast('يرجى تسجيل إجابتك الصوتية أولاً.');
         return;
       }
       const box = document.getElementById('voiceAiResultBox');

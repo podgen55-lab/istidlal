@@ -1,0 +1,48 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // قواعد تأمين بيانات المستخدمين ونظام التحفيز ومكافحة الغش (Anti-Cheat & Rate Limiting)
+    match /users/{userId} {
+      
+      // السماح بالقراءة فقط لصاحب الحساب الموثق
+      allow read: if request.auth != null && request.auth.uid == userId;
+
+      // السماح بإنشاء الحساب المبدئي
+      allow create: if request.auth != null && request.auth.uid == userId;
+
+      // السماح بالتحديث وفق شروط رياضية صارمة تمنع التلاعب بالنقاط والـ XP
+      allow update: if request.auth != null && request.auth.uid == userId
+        // الشرط 1: التحقق من أن الحقول المعدلة محصورة حصراً في عناصر التحفيز وبصمة الوقت
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['currentXP', 'currentStreak', 'hearts', 'last_action_timestamp'])
+        
+        // الشرط 2: التحقق الرياضي الصارم من زيادة الـ XP بمقدار محدد مسبقاً (e.g., +20 لكل محطة منجزة)
+        && (
+          request.resource.data.currentXP == resource.data.currentXP + 20
+          || request.resource.data.currentXP == resource.data.currentXP // في حال تعديل القلوب فقط
+        )
+
+        // الشرط 3: منع التكرار الآلي السريع (Rate Limiting) عبر مقارنة وقت الخادم request.time
+        && request.time >= resource.data.last_action_timestamp + duration.value(3, 's')
+        
+        // الشرط 4: إلزام تسجيل بصمة وقت الخادم الحقيقية
+        && request.resource.data.last_action_timestamp == request.time;
+
+      // السجلات التاريخية للدرجات والنتائج (/users/{userId}/historical_scores/{scoreId})
+      match /historical_scores/{scoreId} {
+        allow read: if request.auth != null && request.auth.uid == userId;
+        
+        // منع التعديل أو الحذف بعد التسجيل، والسماح فقط بإنشاء سجل جديد موثق
+        allow create: if request.auth != null && request.auth.uid == userId
+          && request.resource.data.timestamp == request.time;
+        allow update, delete: if false;
+      }
+    }
+
+    // مجموعات المنهج والدروس والأنشطة العامة (قراءة عامة، وتعديل محمي)
+    match /curriculum/{document=**} {
+      allow read: if true;
+      allow write: if false; // الإشراف فقط عبر Firebase Admin SDK في الخادم
+    }
+  }
+}

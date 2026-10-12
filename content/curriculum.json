@@ -1,0 +1,49 @@
+{
+  "stream": "السنة الثالثة ثانوي - علوم تجريبية ورياضيات",
+  "domain": {
+    "id": "D1",
+    "title": "المجال التعلمي 01: التخصص الوظيفي للبروتينات",
+    "units": [
+      {
+        "id": "U1",
+        "title": "الوحدة 01: آليات تركيب البروتين",
+        "lessons": [
+          {
+            "id": "u1-l1",
+            "title": "الحصة 01: مقر تركيب البروتين في الخلية",
+            "file": "content/u1/u1-l1.json",
+            "status": "published"
+          },
+          {
+            "id": "u1-l2",
+            "title": "الحصة 02: آلية الاستنساخ (Transcription)",
+            "file": "content/u1/u1-l2.json",
+            "status": "published"
+          },
+          {
+            "id": "u1-l3",
+            "title": "الحصة 03: الشفرة الوراثية ومراحل الترجمة",
+            "file": "content/u1/u1-l3.json",
+            "status": "published"
+          }
+        ],
+        "exercises": [
+          {
+            "id": "u1-l1-ex1",
+            "lessonId": "u1-l1",
+            "type": "EX_1_RECALL",
+            "title": "التمرين الأول: مقر تركيب البروتين والنص العلمي",
+            "file": "content/u1/u1-l1-ex1.json"
+          },
+          {
+            "id": "u1-l2-ex1",
+            "lessonId": "u1-l2",
+            "type": "EX_2_REASONING",
+            "title": "التمرين الثاني: آلية الاستنساخ وتثبيط ARN بوليمراز",
+            "file": "content/u1/u1-l2-ex1.json"
+          }
+        ]
+      }
+    ]
+  }
+}
