@@ -1,0 +1,127 @@
+{
+  "curriculum": "البرنامج الرسمي لمادة علوم الطبيعة والحياة - السنة الثالثة ثانوي (3AS)",
+  "stream": "شعبة علوم تجريبية",
+  "year": "2026-2027",
+  "author_credit": "الأستاذ عدة بن عطية صلاح الدين",
+  "levels": {
+    "1AS": {
+      "title": "السنة الأولى ثانوي (ج م ع ت / ج م آ)",
+      "domains": []
+    },
+    "2AS": {
+      "title": "السنة الثانية ثانوي (علوم تجريبية / رياضيات)",
+      "domains": []
+    },
+    "3AS": {
+      "title": "السنة الثالثة ثانوي - علوم تجريبية",
+      "domains": [
+        {
+          "id": "domain1",
+          "title": "المجال 1: التخصص الوظيفي للبروتينات",
+          "emoji": "🧬",
+          "units": [
+            {
+              "id": "d1_u1",
+              "title": "الوحدة 1: آليات تركيب البروتين",
+              "lessons": [
+                { "id": "d1_u1_l1", "title": "1. مقر تركيب البروتين في الخلية", "french": "Le siège de la synthèse protéique", "trimester": null, "planned_week": null },
+                { "id": "d1_u1_l2", "title": "2. الوسيط الناقل للمعلومة الوراثية", "french": "L'intermédiaire de l'information génétique (ARNm)", "trimester": null, "planned_week": null },
+                { "id": "d1_u1_l3", "title": "3. آلية الاستنساخ", "french": "Le mécanisme de la transcription", "trimester": 1, "planned_week": 3 },
+                { "id": "d1_u1_l4", "title": "4. الشفرة الوراثية", "french": "Le code génétique", "trimester": null, "planned_week": null },
+                { "id": "d1_u1_l5", "title": "5. آلية الترجمة", "french": "Le mécanisme de la traduction", "trimester": null, "planned_week": null }
+              ]
+            },
+            {
+              "id": "d1_u2",
+              "title": "الوحدة 2: العلاقة بين بنية ووظيفة البروتين",
+              "lessons": [
+                { "id": "d1_u2_l1", "title": "1. العلاقة بين البنية والتخصص الوظيفي للبروتين", "french": "Relation structure-fonction des protéines", "trimester": null, "planned_week": null }
+              ]
+            },
+            {
+              "id": "d1_u3",
+              "title": "الوحدة 3: دور البروتينات في التحفيز الإنزيمي",
+              "lessons": [
+                { "id": "d1_u3_l1", "title": "1. التخصص الوظيفي للبروتين في التحفيز الإنزيمي", "french": "Catalyse enzymatique", "trimester": null, "planned_week": null }
+              ]
+            },
+            {
+              "id": "d1_u4",
+              "title": "الوحدة 4: دور البروتينات في الدفاع عن الذات",
+              "lessons": [
+                { "id": "d1_u4_l1", "title": "1. الذات واللاذات", "french": "Le soi et le non-soi", "trimester": null, "planned_week": null },
+                { "id": "d1_u4_l2", "title": "2. دور البروتينات في حالة الرد المناعي الخلطي", "french": "Réponse immunitaire humorale", "trimester": null, "planned_week": null },
+                { "id": "d1_u4_l3", "title": "3. دور البروتينات في حالة الرد المناعي الخلوي", "french": "Réponse immunitaire cellulaire", "trimester": null, "planned_week": null },
+                { "id": "d1_u4_l4", "title": "4. تحفيز الخلايا اللمفاوية", "french": "Stimulation des lymphocytes", "trimester": null, "planned_week": null },
+                { "id": "d1_u4_l5", "title": "5. فقدان المناعة المكتسبة", "french": "Le syndrome d'immunodéficience acquise (VIH)", "trimester": null, "planned_week": null }
+              ]
+            },
+            {
+              "id": "d1_u5",
+              "title": "الوحدة 5: دور البروتينات في الاتصال العصبي",
+              "lessons": [
+                { "id": "d1_u5_l1", "title": "1. دور البروتينات في النقل المشبكي", "french": "Transmission synaptique", "trimester": null, "planned_week": null },
+                { "id": "d1_u5_l2", "title": "2. كمون الراحة", "french": "Potentiel de repos", "trimester": null, "planned_week": null },
+                { "id": "d1_u5_l3", "title": "3. كمون العمل", "french": "Potentiel d'action", "trimester": null, "planned_week": null },
+                { "id": "d1_u5_l4", "title": "4. آلية الإدماج العصبي", "french": "Intégration nerveuse", "trimester": null, "planned_week": null },
+                { "id": "d1_u5_l5", "title": "5. تأثير المخدرات", "french": "Effet des drogues", "trimester": null, "planned_week": null }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "domain2",
+          "title": "المجال 2: تحويل الطاقة على مستوى ما فوق البنية الخلوية",
+          "emoji": "⚡",
+          "units": [
+            {
+              "id": "d2_u1",
+              "title": "الوحدة 1: آليات تحويل الطاقة الضوئية إلى طاقة كيميائية كامنة",
+              "lessons": [
+                { "id": "d2_u1_l1", "title": "1. مقر التركيب الضوئي ومراحله", "french": "Photosynthèse et ses étapes", "trimester": null, "planned_week": null }
+              ]
+            },
+            {
+              "id": "d2_u2",
+              "title": "الوحدة 2: آليات تحويل الطاقة الكيميائية الكامنة في الجزيئات العضوية إلى طاقة قابلة للاستعمال (ATP)",
+              "lessons": [
+                { "id": "d2_u2_l1", "title": "1. تحويل الطاقة الكيميائية الكامنة في الوسط الهوائي", "french": "Respiration cellulaire (milieu aérobie)", "trimester": null, "planned_week": null },
+                { "id": "d2_u2_l2", "title": "2. تحويل الطاقة الكيميائية الكامنة في الوسط اللاهوائي", "french": "Fermentation (milieu anaérobie)", "trimester": null, "planned_week": null }
+              ]
+            },
+            {
+              "id": "d2_u3",
+              "title": "الوحدة 3: حوصلة التحولات الطاقوية على المستوى الخلوي",
+              "lessons": [
+                { "id": "d2_u3_l1", "title": "1. حوصلة التحولات الطاقوية على المستوى الخلوي", "french": "Bilan des conversions énergétiques", "trimester": null, "planned_week": null }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "domain3",
+          "title": "المجال 3: التكتونية العامة",
+          "emoji": "🌋",
+          "units": [
+            {
+              "id": "d3_u1",
+              "title": "الوحدة 1: بنية الكرة الأرضية",
+              "lessons": [
+                { "id": "d3_u1_l1", "title": "1. بنية الكرة الأرضية", "french": "Structure interne du globe terrestre", "trimester": null, "planned_week": null }
+              ]
+            },
+            {
+              "id": "d3_u2",
+              "title": "الوحدة 2: النشاط التكتوني والظواهر والبنيات الجيولوجية المرتبطة به",
+              "lessons": [
+                { "id": "d3_u2_l1", "title": "1. حركات الصفائح التكتونية", "french": "Mouvements des plaques tectoniques", "trimester": null, "planned_week": null },
+                { "id": "d3_u2_l2", "title": "2. الظواهر المرتبطة بالبناء على مستوى الظهرة", "french": "Dorsales océaniques et accrétion", "trimester": null, "planned_week": null },
+                { "id": "d3_u2_l3", "title": "3. اختفاء اللوح المحيطي، والظواهر المرتبطة به", "french": "Subduction et disparition de la lithosphère", "trimester": null, "planned_week": null }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile containing nickname, email, role, and progress statistics",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "User Auth UID",
+          "maxLength": 128
+        },
+        "nickname": {
+          "type": "string",
+          "description": "Student or Teacher nickname",
+          "maxLength": 50
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address",
+          "maxLength": 100
+        },
+        "role": {
+          "type": "string",
+          "description": "Role: student or teacher",
+          "enum": ["student", "teacher"]
+        },
+        "streak": {
+          "type": "number",
+          "description": "Daily streak days"
+        },
+        "xp": {
+          "type": "number",
+          "description": "Experience points"
+        },
+        "level": {
+          "type": "number",
+          "description": "Current level"
+        },
+        "hearts": {
+          "type": "number",
+          "description": "Current lives/hearts"
+        },
+        "classCode": {
+          "type": "string",
+          "description": "Class code if joined",
+          "maxLength": 30
+        },
+        "avatar": {
+          "type": "string",
+          "description": "Selected avatar emoji",
+          "maxLength": 10
+        }
+      },
+      "required": ["id", "nickname", "email", "role"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile documents keyed by userId matching request.auth.uid"
+    }
+  }
+}

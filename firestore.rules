@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['id', 'nickname', 'email', 'role']) &&
+             data.keys().hasOnly(['id', 'nickname', 'email', 'role', 'streak', 'xp', 'level', 'hearts', 'classCode', 'avatar']) &&
+             data.id is string && data.id.size() <= 128 && data.id == request.auth.uid &&
+             data.nickname is string && data.nickname.size() <= 50 &&
+             data.email is string && data.email.size() <= 100 &&
+             (data.role == 'student' || data.role == 'teacher') &&
+             (!('streak' in data) || data.streak is number) &&
+             (!('xp' in data) || data.xp is number) &&
+             (!('level' in data) || data.level is number) &&
+             (!('hearts' in data) || data.hearts is number) &&
+             (!('classCode' in data) || (data.classCode is string && data.classCode.size() <= 30)) &&
+             (!('avatar' in data) || (data.avatar is string && data.avatar.size() <= 10));
+    }
+
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidId(userId) && isValidUser(request.resource.data);
+      allow update: if isOwner(userId) && isValidId(userId) && isValidUser(request.resource.data) &&
+                       request.resource.data.id == resource.data.id &&
+                       request.resource.data.email == resource.data.email;
+      allow delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -44,9 +44,6 @@ export class AiRouterService {
    * تقييم إجابة التلميذ (نص، صورة كراس، أو تفريغ صوتي)
    */
   static async evaluateSubmission({ exerciseId, rubric, studentAnswer, imageBase64 = null, voiceTranscript = null, model = null }) {
-    const apiKey = this.getStoredApiKey();
-    const activeModel = model || this.getPreferredModel();
-
     const textToEvaluate = studentAnswer || voiceTranscript || '';
 
     const promptPayload = `
@@ -63,47 +60,29 @@ ${JSON.stringify(rubric, null, 2)}
 3. امنح العلامة المستحقة واشرح أين ضاعت النقاط بالتفصيل.
 `;
 
-    if (apiKey) {
-      try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${activeModel}:generateContent?key=${apiKey}`;
-        const parts = [];
+    try {
+      const response = await fetch('/api/gemini/evaluate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt: promptPayload,
+          imageBase64: imageBase64,
+          model: model || 'gemini-3.8-flash'
+        })
+      });
 
-        // إذا كانت هناك صورة كراس بالهاتف
-        if (imageBase64) {
-          parts.push({
-            inline_data: {
-              mime_type: 'image/jpeg',
-              data: imageBase64.replace(/^data:image\/[a-z]+;base64,/, '')
-            }
-          });
+      if (response.ok) {
+        const data = await response.json();
+        if (data && data.text) {
+          return {
+            isLive: !data.fallback,
+            modelUsed: data.model || 'gemini-3.8-flash',
+            feedbackText: data.text
+          };
         }
-
-        parts.push({ text: promptPayload });
-
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            system_instruction: {
-              parts: [{ text: SYSTEM_INSTRUCTION_BAC_EXAMINER }]
-            },
-            contents: [{ parts }]
-          })
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data.candidates && data.candidates[0].content) {
-            return {
-              isLive: true,
-              modelUsed: activeModel,
-              feedbackText: data.candidates[0].content.parts[0].text
-            };
-          }
-        }
-      } catch (err) {
-        console.warn('AI Router network call failed, falling back to local evaluator:', err);
       }
+    } catch (err) {
+      console.warn('AI Router server proxy call failed, falling back to local evaluator:', err);
     }
 
     // المصحح المنهجي المدمج في حال عدم الاتصال بالشبكة
