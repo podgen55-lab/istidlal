@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { DIAGNOSTIC_QUIZ_QUESTIONS } from '../data/mockData';
 import { AbqoorMascot } from '../components/AbqoorMascot';
+import { MethodologyTimer } from '../components/MethodologyTimer';
+import { GraderMemoryTracker } from '../components/GraderMemoryTracker';
 import confetti from 'canvas-confetti';
 import {
   CheckCircle2,
@@ -88,8 +90,10 @@ export const AssessmentView: React.FC<AssessmentViewProps> = ({
       {/* Header */}
       <div className="glass-card rounded-24 p-6 border border-navy-700/60 flex items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-violet-500/20 text-violet-300 text-[10px] font-bold border border-violet-500/30 mb-1">
-            تقييم تشخيصي رسمي
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-lime-400/10 border border-lime-400/30 text-lime-400 text-xs font-bold mb-1">
+            <span>إِسْتِدْلال | إعداد والمنهاج المعتمد: الأستاذ عبد الرحيم فَنْكُوح</span>
+            <span>•</span>
+            <span className="font-mono text-amber-300">by ABDERRAHIM FENKOUH</span>
           </div>
           <h1 className="text-xl md:text-2xl font-heading text-slate-100">
             اختبار كفاءات منهجية بكالوريا علوم الطبيعة والحياة
@@ -102,6 +106,11 @@ export const AssessmentView: React.FC<AssessmentViewProps> = ({
           📊
         </div>
       </div>
+
+      {/* Countdown Methodology Timer for exam practice */}
+      {!isFinished && (
+        <MethodologyTimer initialType="reasoning" />
+      )}
 
       {/* Results Screen */}
       {isFinished ? (

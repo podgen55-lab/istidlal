@@ -10,6 +10,7 @@ import { CoursesView } from './views/CoursesView';
 import { GamesView } from './views/GamesView';
 import { AssessmentView } from './views/AssessmentView';
 import { TeacherDashboardView } from './views/TeacherDashboardView';
+import { StudentProgressDashboard } from './components/StudentProgressDashboard';
 
 function AppContent() {
   const { userProfile, addXP } = useAuth();
@@ -59,6 +60,10 @@ function AppContent() {
         {activeView === 'teacher' && (
           <TeacherDashboardView />
         )}
+
+        {activeView === 'dashboard' && (
+          <StudentProgressDashboard />
+        )}
       </main>
 
       {/* Mobile Bottom Tab Bar */}
@@ -89,7 +94,7 @@ function AppContent() {
             <span>منصة التميز المنهجي لبكالوريا علوم الطبيعة والحياة (3AS)</span>
           </div>
           <div>
-            بإشراف وتطوير: <strong className="text-amber-300 font-mono">ABDERRAHIM FENKOUH</strong> • قاعدة البيانات: <span className="text-lime-400 font-mono">Firestore متصل</span>
+            المنهاج وإعداد المحتوى: <strong className="text-amber-300 font-bold">الأستاذ عبد الرحيم فنكوح (by ABDERRAHIM FENKOUH)</strong> • قاعدة البيانات: <span className="text-lime-400 font-mono">Firestore متصل</span>
           </div>
         </div>
       </footer>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Flame, Zap, Heart, Shield, GraduationCap, LogIn, LogOut, User } from 'lucide-react';
+import { BrandLogo } from './BrandLogo';
+import { Flame, Zap, Heart, Shield, GraduationCap, LogIn, LogOut, TrendingUp } from 'lucide-react';
 
 interface NavbarProps {
   onOpenAgentTeam: () => void;
@@ -26,33 +27,30 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header className="sticky top-0 z-40 bg-navy-900/90 backdrop-blur-md border-b border-navy-700/60 px-4 lg:px-8 py-3">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-        {/* Brand Logo */}
+        {/* Professional Brand Logo */}
         <div 
           onClick={() => setActiveView('home')}
-          className="flex items-center gap-3 cursor-pointer group select-none"
+          className="cursor-pointer"
         >
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-violet-600 via-cyan-500 to-lime-400 p-[2px] shadow-lg shadow-violet-500/20 group-hover:scale-105 transition-transform">
-            <div className="w-full h-full bg-navy-900 rounded-[14px] flex items-center justify-center text-xl">
-              🧬
-            </div>
-          </div>
-          <div>
-            <div className="flex items-baseline gap-2">
-              <span className="text-xl lg:text-2xl font-heading tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-cyan-300 to-lime-400">
-                استدلال
-              </span>
-              <span className="text-xs font-mono font-bold tracking-wider text-slate-400 uppercase hidden sm:inline">
-                istidlal
-              </span>
-            </div>
-            <p className="text-[10px] text-slate-400 -mt-1 hidden md:block">
-              منصة التميز المنهجي لبكالوريا علوم الطبيعة والحياة
-            </p>
-          </div>
+          <BrandLogo size="md" />
         </div>
 
         {/* HUD Stats Bar & Auth */}
         <div className="flex items-center gap-2 sm:gap-4">
+          {/* Dashboard Button */}
+          <button
+            onClick={() => setActiveView(activeView === 'dashboard' ? 'home' : 'dashboard')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-bold transition-all ${
+              activeView === 'dashboard'
+                ? 'bg-lime-400/20 border-lime-400 text-lime-300 shadow-md shadow-lime-400/10'
+                : 'bg-navy-800/80 border-navy-700 text-slate-300 hover:text-white hover:border-lime-500/50'
+            }`}
+            title="لوحة المؤشرات البيانية (Recharts)"
+          >
+            <TrendingUp className="w-3.5 h-3.5 text-lime-400" />
+            <span className="hidden sm:inline">لوحة المؤشرات</span>
+          </button>
+
           {/* Streak */}
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs sm:text-sm font-bold shadow-sm">
             <Flame className="w-4 h-4 fill-amber-500 text-amber-500 animate-pulse" />

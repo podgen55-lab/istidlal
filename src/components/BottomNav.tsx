@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, BookOpen, Headphones, Video, Gamepad2, Award } from 'lucide-react';
+import { Home, BookOpen, Headphones, Video, Gamepad2, Award, TrendingUp } from 'lucide-react';
 
 interface BottomNavProps {
   activeView: string;
@@ -15,8 +15,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   const tabs = [
     { id: 'home', label: 'الرئيسية', icon: Home },
     { id: 'courses', label: 'الدروس', icon: BookOpen },
-    { id: 'podcast', label: 'بودكاست', icon: Headphones },
-    { id: 'video', label: 'فيديو', icon: Video },
+    { id: 'dashboard', label: 'المؤشرات', icon: TrendingUp },
     { id: 'games', label: 'ألعاب', icon: Gamepad2 },
     { id: 'assessment', label: 'تقييم', icon: Award },
   ];

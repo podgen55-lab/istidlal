@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { DOMAINS_SEED, TRANSCRIPTION_LESSON } from '../data/mockData';
 import { Lesson } from '../types';
 import { AbqoorMascot } from '../components/AbqoorMascot';
+import { MethodologyTimer } from '../components/MethodologyTimer';
+import { NotebookVisionScanner } from '../components/NotebookVisionScanner';
+import { GraderMemoryTracker } from '../components/GraderMemoryTracker';
 import {
   BookOpen,
   CheckCircle2,
@@ -20,7 +23,17 @@ import {
   Volume2,
   Bookmark,
   Dna,
+  Camera,
+  Keyboard,
+  Target,
+  Brain,
+  Sliders,
 } from 'lucide-react';
+import { TRANSCRIPTION_FULL_CURRICULUM } from '../data/istidlal_curriculum_data';
+import { InteractiveSlideDeck } from '../components/InteractiveSlideDeck';
+import { DocumentExploitationStepper } from '../components/DocumentExploitationStepper';
+import { TriModalSubmissionHub } from '../components/TriModalSubmissionHub';
+import { AdaptiveRetrainingHub } from '../components/AdaptiveRetrainingHub';
 
 interface CoursesViewProps {
   onOpenAgentTeam: () => void;
@@ -29,7 +42,7 @@ interface CoursesViewProps {
 export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => {
   const [selectedDomainId, setSelectedDomainId] = useState('domain1');
   const [activeLesson, setActiveLesson] = useState<Lesson | null>(TRANSCRIPTION_LESSON);
-  const [lessonTab, setLessonTab] = useState<'summary' | 'simulator' | 'video' | 'podcast' | 'flashcards' | 'exercise' | 'tutor'>('summary');
+  const [lessonTab, setLessonTab] = useState<'slides' | 'summary' | 'stepper' | 'exercise' | 'retraining' | 'simulator' | 'video' | 'podcast' | 'flashcards' | 'tutor'>('slides');
   
   // Interactive DNA transcription simulator state
   const defaultDna = 'TACGGATTCGCA';
@@ -53,7 +66,8 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1.0);
   const [sleepTimer, setSleepTimer] = useState<number | null>(null);
 
-  // Exercise submission
+  // Exercise submission & mode
+  const [exerciseMode, setExerciseMode] = useState<'camera' | 'text'>('camera');
   const [studentAnswer, setStudentAnswer] = useState('');
   const [showModelAnswer, setShowModelAnswer] = useState(false);
 
@@ -162,12 +176,15 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
         {/* Lesson Tabs Navigation */}
         <div className="flex items-center gap-2 overflow-x-auto no-scrollbar p-1.5 glass-card rounded-24 border border-navy-800 bg-navy-950/60">
           {[
+            { id: 'slides', label: 'السلايدات التفاعلية 📑', icon: Layers },
             { id: 'summary', label: 'ملخص الدرس', icon: FileText },
-            { id: 'simulator', label: 'مختبر الاستنساخ التفاعلي ⚡', icon: Dna },
-            { id: 'video', label: 'فيديو وشروحات', icon: Video },
-            { id: 'podcast', label: 'بودكاست صوتي', icon: Headphones },
+            { id: 'stepper', label: 'استغلال الوثائق (5.0 ن) 🔬', icon: Target },
+            { id: 'exercise', label: 'محرر الإجابة الثلاثي ✍️📸🎙️', icon: Camera },
+            { id: 'retraining', label: 'إعادة التدريب الذكي 🧠', icon: Brain },
+            { id: 'simulator', label: 'مختبر الاستنساخ ⚡', icon: Dna },
+            { id: 'video', label: 'فيديو 3D والشروحات', icon: Video },
+            { id: 'podcast', label: 'بودكاست استدلال', icon: Headphones },
             { id: 'flashcards', label: 'بطاقات المراجعة', icon: Layers },
-            { id: 'exercise', label: 'تمرين تطبيقي', icon: BookOpen },
             { id: 'tutor', label: 'اسأل المرشد', icon: HelpCircle },
           ].map((tab) => {
             const Icon = tab.icon;
@@ -188,6 +205,28 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
             );
           })}
         </div>
+
+        {/* Tab: Slides Deck */}
+        {lessonTab === 'slides' && (
+          <InteractiveSlideDeck
+            slides={TRANSCRIPTION_FULL_CURRICULUM.slides}
+            lessonTitle={activeLesson.title}
+          />
+        )}
+
+        {/* Tab: Document Exploitation Stepper */}
+        {lessonTab === 'stepper' && (
+          <DocumentExploitationStepper
+            steps={TRANSCRIPTION_FULL_CURRICULUM.documentSteps}
+          />
+        )}
+
+        {/* Tab: Adaptive Retraining Hub */}
+        {lessonTab === 'retraining' && (
+          <AdaptiveRetrainingHub
+            drills={TRANSCRIPTION_FULL_CURRICULUM.retrainingDrills}
+          />
+        )}
 
         {/* Tab 1: Summary */}
         {lessonTab === 'summary' && (
@@ -585,59 +624,48 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
           </div>
         )}
 
-        {/* Tab 5: Exercise */}
+        {/* Tab 5: Exercise (Tri-Modal Submission Hub) */}
         {lessonTab === 'exercise' && (
-          <div className="glass-card rounded-24 p-6 md:p-8 border border-navy-700/60 space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-navy-800 pb-4">
-              <div>
-                <span className="text-xs font-bold text-violet-400">التمرين التطبيقي للدرس</span>
-                <h3 className="text-lg font-heading text-slate-100">{res.exercise?.title}</h3>
+          <div className="space-y-6">
+            {/* Grader Memory Tracker */}
+            <GraderMemoryTracker />
+
+            {/* Tri-Modal Submission Hub */}
+            <TriModalSubmissionHub
+              exerciseTitle={res.exercise?.title || 'آلية الاستنساخ: شروط ومراحل تشكل الـ ARNm'}
+              rubricItems={[
+                'مقدمة مهيكلة تنتهي بطرح المشكل العلمي الدقيق حول شروط ومراحل الاستنساخ (0.50 ن)',
+                'ذكر شروط الاستنساخ الأربعة: مورثة ADN، إنزيم ARN بوليمراز، ريبونيوكليوتيدات حرة، طاقة ATP (1.00 ن)',
+                'شرح مراحل الانطلاق، الاستطالة (تكامل A-U و C-G والاتجاه 5 إلى 3)، والنهاية (1.50 ن)',
+                'خاتمة تركيبية تجيب عن المشكل العلمي بأمانة بيولوجية (0.50 ن)',
+                'سلامة المصطلحات العلمية ثنائية اللغة ونظافة العرض والربط المنطقي (1.50 ن)',
+              ]}
+              onSubmissionGraded={(score, max) => {
+                console.log(`Graded: ${score}/${max}`);
+              }}
+            />
+
+            {/* Model Answer Drawer */}
+            <div className="glass-card rounded-24 p-6 border border-navy-700/60 space-y-4">
+              <div className="flex items-center justify-between">
+                <h4 className="font-heading text-sm text-slate-200 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  <span>عناصر الإجابة النموذجية المعتمدة رسمياً (الأستاذ عبد الرحيم فنكوح)</span>
+                </h4>
+                <button
+                  onClick={() => setShowModelAnswer(!showModelAnswer)}
+                  className="px-4 py-2 rounded-24 bg-navy-800 hover:bg-navy-700 text-cyan-400 text-xs font-bold border border-cyan-500/30 transition-colors"
+                >
+                  {showModelAnswer ? 'إخفاء الحل النموذجي' : 'عرض الحل الوزاري النموذجي'}
+                </button>
               </div>
-              <span className="text-xs font-bold text-lime-400 px-3 py-1 rounded-full bg-lime-400/10 border border-lime-400/20">
-                العلامة: {res.exercise?.points} نقاط كاملة
-              </span>
-            </div>
 
-            <div className="p-4 rounded-24 bg-navy-950/70 border border-navy-800 text-xs sm:text-sm text-slate-200 leading-relaxed">
-              {res.exercise?.description}
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-300">محرر صياغة الإجابة:</label>
-              <textarea
-                value={studentAnswer}
-                onChange={(e) => setStudentAnswer(e.target.value)}
-                rows={6}
-                placeholder="اكتب إجابتك هنا مهيكلة بمقدمة تطرح المشكل، وعرض، وخاتمة..."
-                className="w-full bg-navy-950 border border-navy-700 rounded-24 p-4 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-violet-500 leading-relaxed"
-              ></textarea>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
-              <button
-                onClick={() => setShowModelAnswer(!showModelAnswer)}
-                className="px-4 py-2.5 rounded-24 bg-navy-800 hover:bg-navy-700 text-cyan-400 text-xs font-bold border border-cyan-500/30 transition-colors"
-              >
-                {showModelAnswer ? 'إخفاء الحل النموذجي' : 'عرض الحل الوزاري النموذجي'}
-              </button>
-
-              <button
-                onClick={onOpenAgentTeam}
-                className="px-5 py-2.5 rounded-24 bg-gradient-to-r from-violet-600 to-lime-500 text-white text-xs font-bold shadow-lg shadow-violet-600/20 hover:scale-105 transition-transform"
-              >
-                طلب تصحيح من «المصحّح» ✅
-              </button>
-            </div>
-
-            {showModelAnswer && (
-              <div className="p-5 rounded-24 bg-emerald-950/20 border border-emerald-500/30 space-y-3 animate-fadeIn text-xs sm:text-sm text-slate-200 leading-relaxed">
-                <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm">
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>عناصر الإجابة النموذجية المعتمدة في البكالوريا:</span>
+              {showModelAnswer && (
+                <div className="p-5 rounded-24 bg-emerald-950/20 border border-emerald-500/30 space-y-3 animate-fadeIn text-xs sm:text-sm text-slate-200 leading-relaxed">
+                  <div className="whitespace-pre-wrap">{res.exercise?.modelAnswer}</div>
                 </div>
-                <div className="whitespace-pre-wrap">{res.exercise?.modelAnswer}</div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         )}
 
@@ -705,7 +733,7 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
             <span>•</span>
             <span>3AS علوم تجريبية ورياضيات</span>
             <span>•</span>
-            <span>by ABDERRAHIM FENKOUH</span>
+            <span>المنهاج وإعداد المحتوى: الأستاذ عبد الرحيم فنكوح (by ABDERRAHIM FENKOUH)</span>
           </div>
           <h1 className="text-2xl font-heading text-slate-100">شجرة المنهاج والوحدات التعليمية</h1>
           <p className="text-xs text-slate-400">
@@ -819,8 +847,8 @@ export const CoursesView: React.FC<CoursesViewProps> = ({ onOpenAgentTeam }) => 
       </div>
 
       {/* Official credit line in footer updated as specified */}
-      <div className="text-center text-xs text-slate-500 py-4 border-t border-navy-800">
-        البرنامج الرسمي لمادة علوم الطبيعة والحياة (شعبة علوم تجريبية ورياضيات) • <strong className="text-slate-300">by ABDERRAHIM FENKOUH</strong>.
+      <div className="text-center text-xs text-slate-400 py-4 border-t border-navy-800">
+        المنهاج وإعداد المحتوى: <strong className="text-amber-300">الأستاذ عبد الرحيم فنكوح (by ABDERRAHIM FENKOUH)</strong> • بكالوريا علوم الطبيعة والحياة (3AS).
       </div>
     </div>
   );

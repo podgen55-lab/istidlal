@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { UserProfile } from '../types';
 import { AbqoorMascot } from '../components/AbqoorMascot';
 import { LEAGUE_LEADERBOARD } from '../data/mockData';
+import { GraderMemoryTracker } from '../components/GraderMemoryTracker';
+import { MethodologyTimer } from '../components/MethodologyTimer';
 import {
   Flame,
   Zap,
@@ -14,7 +16,11 @@ import {
   CheckCircle2,
   Info,
   ChevronLeft,
+  Camera,
+  Clock,
+  TrendingUp,
 } from 'lucide-react';
+import { StudentProgressDashboard } from '../components/StudentProgressDashboard';
 
 interface HomeViewProps {
   user: UserProfile;
@@ -28,6 +34,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
   onOpenAgentTeam,
 }) => {
   const [showMethodologyGuide, setShowMethodologyGuide] = useState(false);
+  const [activeHomeTab, setActiveHomeTab] = useState<'overview' | 'dashboard'>('overview');
 
   return (
     <div className="space-y-6 pb-20 md:pb-8 animate-fadeIn">
@@ -38,18 +45,16 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-3 text-center md:text-right">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-lime-400/10 border border-lime-400/30 text-lime-400 text-xs font-bold">
-              <span>🌟 بكالوريا الجزائر 2026-2027</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-lime-400/10 border border-lime-400/30 text-lime-400 text-xs font-bold">
+              <span>🌟 إِسْتِدْلال | المنهاج وإعداد المحتوى: الأستاذ عبد الرحيم فَنْكُوح</span>
               <span>•</span>
-              <span>شعبة علوم تجريبية ورياضيات</span>
-              <span>•</span>
-              <span>بإشراف: ABDERRAHIM FENKOUH</span>
+              <span className="font-mono text-amber-300">by ABDERRAHIM FENKOUH</span>
             </div>
             <h1 className="text-2xl md:text-4xl font-heading text-slate-100 leading-tight">
               أهلاً بك يا <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-violet-300 to-cyan-300">{user.nickname}</span>!
             </h1>
             <p className="text-xs md:text-sm text-slate-300 max-w-xl leading-relaxed">
-              «الخيال يفتح الأبواب، والمنهجية العلمية الصارمة تصنع العلامة الكاملة 20/20» — مرحباً بك في مخبر عبقور الذكي لإتقان استغلال الوثائق وهندسة النصوص العلمية.
+              «الخيال يفتح الأبواب، والمنهجية العلمية الصارمة تصنع الـ 20/20» — مرحباً بك في منصة إستدلال الرسمية. تدرّب على تصوير كراسك الورقي بالكاميرا، وتحدّ المؤقت المنهجي مع ذاكرة المصحح الذكي.
             </p>
 
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-2">
@@ -57,9 +62,20 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 onClick={() => onNavigate('courses')}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-24 bg-gradient-to-r from-violet-600 to-cyan-500 text-white text-xs md:text-sm font-bold shadow-lg shadow-violet-600/30 hover:scale-105 transition-transform"
               >
-                <BookOpen className="w-4 h-4" />
-                <span>مواصلة الدرس (آلية الاستنساخ)</span>
+                <Camera className="w-4 h-4 text-cyan-300" />
+                <span>تصوير الكراس وحل التمرين (15د)</span>
                 <ArrowLeft className="w-4 h-4" />
+              </button>
+
+              <button
+                onClick={() => {
+                  const el = document.getElementById('student-analytics-section');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-24 bg-gradient-to-r from-lime-500 to-emerald-600 text-slate-950 font-bold text-xs md:text-sm shadow-lg shadow-lime-500/20 hover:scale-105 transition-transform"
+              >
+                <TrendingUp className="w-4 h-4 text-slate-950" />
+                <span>لوحة تطور المستوى (Recharts) 📈</span>
               </button>
 
               <button
@@ -67,7 +83,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 className="flex items-center gap-2 px-4 py-2.5 rounded-24 bg-navy-800 hover:bg-navy-700 text-amber-300 border border-amber-400/30 text-xs md:text-sm font-bold transition-colors"
               >
                 <Gamepad2 className="w-4 h-4 text-amber-400" />
-                <span>معركة عبقور العلمية (Quiz Battle)</span>
+                <span>معركة عبقور العلمية</span>
               </button>
 
               <button
@@ -82,9 +98,10 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
           <div className="flex-shrink-0">
             <AbqoorMascot
-              mood="eureka"
+              mood="playful"
               size="lg"
-              message="يوريكا! حافظ على سلسلتك؛ 5 أيام متتالية إنجاز عبقري! ⚡🧪"
+              interactive={true}
+              message="ههههه! يوريكا! انقر عليّ لأكشف لك أسرار الـ 20/20 في العلوم! ⚡🧪"
             />
           </div>
         </div>
@@ -145,6 +162,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Grader Learning Memory Tracker Banner */}
+      <GraderMemoryTracker />
 
       {/* 3. Continue Learning & Verb of the Day */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -258,7 +278,12 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       </div>
 
-      {/* 4. Weekly League Top 5 */}
+      {/* 4. Student Analytics & Level Evolution Charts (Recharts) */}
+      <section id="student-analytics-section" className="scroll-mt-20">
+        <StudentProgressDashboard />
+      </section>
+
+      {/* 5. Weekly League Top 5 */}
       <div className="glass-card rounded-24 p-6 border border-navy-700/60 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
