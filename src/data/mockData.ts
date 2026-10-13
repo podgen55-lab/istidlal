@@ -6,9 +6,14 @@ export const INITIAL_USER: UserProfile = {
   email: 'student@istidlal.dz',
   role: 'student',
   streak: 5,
-  xp: 280,
-  level: 4,
+  xp: 620,
+  level: 5,
   hearts: 5,
+  reviewPoints: 2,
+  weaknesses: [
+    'صياغة الاستنتاج في الوثيقة 1 (تركيب البروتين)',
+    "تفريق اتجاه البناء 5'->3' والقراءة 3'->5'",
+  ],
   classCode: 'BAC-2027-EX',
   avatar: '👨‍🔬',
 };

@@ -9,6 +9,8 @@ export interface UserProfile {
   xp: number;
   level: number;
   hearts: number;
+  reviewPoints?: number;
+  weaknesses?: string[];
   classCode?: string;
   avatar: string;
 }

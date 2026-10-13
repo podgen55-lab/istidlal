@@ -19,8 +19,15 @@ import {
   Camera,
   Clock,
   TrendingUp,
+  Dna,
+  Layers,
+  RotateCcw,
+  Target,
+  ShieldAlert,
 } from 'lucide-react';
 import { StudentProgressDashboard } from '../components/StudentProgressDashboard';
+import { AdaptiveRetrainingHub } from '../components/AdaptiveRetrainingHub';
+import { TRANSCRIPTION_FULL_CURRICULUM } from '../data/istidlal_curriculum_data';
 
 interface HomeViewProps {
   user: UserProfile;
@@ -35,6 +42,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
 }) => {
   const [showMethodologyGuide, setShowMethodologyGuide] = useState(false);
   const [activeHomeTab, setActiveHomeTab] = useState<'overview' | 'dashboard'>('overview');
+  const [showRetrainingSession, setShowRetrainingSession] = useState(false);
 
   return (
     <div className="space-y-6 pb-20 md:pb-8 animate-fadeIn">
@@ -65,6 +73,22 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 <Camera className="w-4 h-4 text-cyan-300" />
                 <span>تصوير الكراس وحل التمرين (15د)</span>
                 <ArrowLeft className="w-4 h-4" />
+              </button>
+
+              <button
+                onClick={() => onNavigate('bank')}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-24 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold text-xs md:text-sm shadow-lg shadow-cyan-600/20 hover:scale-105 transition-transform"
+              >
+                <BookOpen className="w-4 h-4 text-cyan-200" />
+                <span>بنك التمارين (24 تمريناً) 📚</span>
+              </button>
+
+              <button
+                onClick={() => onNavigate('lab')}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-24 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-bold text-xs md:text-sm shadow-lg shadow-violet-600/20 hover:scale-105 transition-transform"
+              >
+                <Dna className="w-4 h-4 text-violet-200" />
+                <span>مختبر النمذجة 3D 🧬</span>
               </button>
 
               <button

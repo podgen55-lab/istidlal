@@ -19,7 +19,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   const { currentUser, userProfile, logout, toggleRole } = useAuth();
 
   const streak = userProfile?.streak ?? 5;
-  const xp = userProfile?.xp ?? 280;
+  const xp = userProfile?.xp ?? 620;
+  const reviewPoints = userProfile?.reviewPoints ?? 2;
   const hearts = userProfile?.hearts ?? 5;
   const role = userProfile?.role ?? 'student';
   const nickname = userProfile?.nickname ?? (currentUser ? 'تلميذ استدلال' : 'زائر');
@@ -36,11 +37,11 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* HUD Stats Bar & Auth */}
-        <div className="flex items-center gap-2 sm:gap-4">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
           {/* Dashboard Button */}
           <button
             onClick={() => setActiveView(activeView === 'dashboard' ? 'home' : 'dashboard')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-bold transition-all ${
+            className={`hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-bold transition-all ${
               activeView === 'dashboard'
                 ? 'bg-lime-400/20 border-lime-400 text-lime-300 shadow-md shadow-lime-400/10'
                 : 'bg-navy-800/80 border-navy-700 text-slate-300 hover:text-white hover:border-lime-500/50'
@@ -51,25 +52,28 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span className="hidden sm:inline">لوحة المؤشرات</span>
           </button>
 
-          {/* Streak */}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs sm:text-sm font-bold shadow-sm">
-            <Flame className="w-4 h-4 fill-amber-500 text-amber-500 animate-pulse" />
-            <span>{streak}</span>
-            <span className="text-[10px] text-amber-400/70 hidden sm:inline">أيام</span>
-          </div>
-
           {/* XP Bar */}
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-xs sm:text-sm font-bold shadow-sm">
             <Zap className="w-4 h-4 fill-violet-400 text-violet-400" />
-            <span>{xp}</span>
-            <span className="text-[10px] text-violet-400/70 hidden sm:inline">XP</span>
+            <span>⚡ {xp} XP</span>
           </div>
 
-          {/* Hearts */}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs sm:text-sm font-bold shadow-sm">
-            <Heart className="w-4 h-4 fill-rose-500 text-rose-500" />
-            <span>{hearts}</span>
+          {/* Review Points Target */}
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs sm:text-sm font-bold shadow-sm" title="نقاط المراجعة المستهدفة">
+            <span className="text-sm">🎯</span>
+            <span>{reviewPoints} نقاط للمراجعة</span>
           </div>
+
+          {/* AI Agents Active Status Pill */}
+          <button
+            onClick={onOpenAgentTeam}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs font-bold hover:bg-emerald-500/25 transition-all shadow-sm"
+            title="Google AI Agents: نشط"
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span className="hidden sm:inline">🤖 Google AI Agents: نشط</span>
+            <span className="sm:hidden">🤖 نشط</span>
+          </button>
 
           {/* Role Toggle Switcher */}
           <button

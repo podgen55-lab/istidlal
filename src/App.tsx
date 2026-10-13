@@ -11,6 +11,8 @@ import { GamesView } from './views/GamesView';
 import { AssessmentView } from './views/AssessmentView';
 import { TeacherDashboardView } from './views/TeacherDashboardView';
 import { StudentProgressDashboard } from './components/StudentProgressDashboard';
+import { ExerciseBankView } from './views/ExerciseBankView';
+import { BioscienceMolecularLab } from './components/BioscienceMolecularLab';
 
 function AppContent() {
   const { userProfile, addXP } = useAuth();
@@ -59,6 +61,19 @@ function AppContent() {
 
         {activeView === 'teacher' && (
           <TeacherDashboardView />
+        )}
+
+        {activeView === 'bank' && (
+          <ExerciseBankView
+            onAddXP={addXP}
+            onOpenAgentTeam={() => setIsAgentModalOpen(true)}
+          />
+        )}
+
+        {activeView === 'lab' && (
+          <div className="space-y-6">
+            <BioscienceMolecularLab />
+          </div>
         )}
 
         {activeView === 'dashboard' && (
